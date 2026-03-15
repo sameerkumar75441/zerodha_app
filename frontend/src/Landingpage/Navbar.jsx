@@ -7,7 +7,7 @@ import { AppContent } from "../context/AppContext";
 function Navbar() {
   const { isLoggedin, logout, loading } = useContext(AppContent);
 
-  // 🔥 AUTH CHECK CHAL RAHA HAI → KUCH BHI MAT DIKHAO
+   
   if (loading) return null;
 
   return (

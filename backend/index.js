@@ -22,8 +22,8 @@ const { userRouter } = require("./Routes/userRoute.js");
 
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://zerodha-clone-1-fevn.onrender.com"
+  process.env.FRONTEND_URL,
+  process.env.DASHBOARD_URL
 ];
 
 app.use(cors({

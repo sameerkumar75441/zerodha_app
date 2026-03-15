@@ -13,7 +13,7 @@ function SignUp() {
     <>
       <Navbar />
 
-      {/* Inline CSS */}
+    
       <style>{`
         .signup-container {
           min-height: 100vh;
@@ -88,7 +88,7 @@ function SignUp() {
         }
       `}</style>
 
-      {/* Sign Up UI */}
+ 
       <div className="signup-container">
         <div className="signup-card">
           <h2>Create Account</h2>
