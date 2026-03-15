@@ -175,7 +175,7 @@ const { otp } = req.body;
     user.verifyOtp="";
     user.verifyOtpExpireAt=0;
     await user.save();
-    return res.json({successs:true, message:"email verified successfully"})
+    return res.json({success:true, message:"email verified successfully"})
   }catch(error){
     return res.json({success:false,message:error.message})
   }
