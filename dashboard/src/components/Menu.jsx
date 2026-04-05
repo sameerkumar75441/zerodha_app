@@ -17,7 +17,7 @@ const Menu = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = frontendUrl;
+    window.location.href = "http://localhost:5174/";
   };
 
   const menuClass = "menu";

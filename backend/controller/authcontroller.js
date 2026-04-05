@@ -108,78 +108,7 @@ const logout=async(req,res)=>{
 }
 
 
-const sendVerifyOtp = async (req, res) => {
-  try {
-    const userId = req.user.id;   // ✅ from middleware
 
-    const user = await userModel.findById(userId);
-    if (!user) {
-      return res.json({ success: false, message: "User not found" });
-    }
-
-    if (user.isAccountverified) {
-      return res.json({
-        success: false,
-        message: "Account already verified",
-      });
-    }
-
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-
-    user.verifyOtp = otp;
-    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
-    await user.save();
-
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Account verification OTP",
-      text: `Your OTP is ${otp}. Verify your account using this OTP.`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    return res.json({
-      success: true,
-      message: "Verification OTP sent to email",
-    });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
-  }
-};
-
-//// VERIFY THE EMAIL USING OTP
-const verifyEmail=async(req,res)=>{
-  // const {userId,otp}=req.body;
-  const userId = req.user.id;
-const { otp } = req.body;
- 
-
-  if(!userId || !otp){
-   return res.json({success:false,message:"Missing values"})
-  }
-  try{
-    const user=await userModel.findById(userId);
-
-    if(!user){
-      return res.json({success:false,message:"User not exist"});
-    }
-   if (!user.verifyOtp || String(user.verifyOtp) !== String(otp)) {
-  return res.json({ success:false, message:"Invalid OTP" });
-}
-
-    if(user.verifyOtpExpireAt<Date.now()){
-      return res.json({success:false,message:"Expire Otp"})
-    }
-    user.isAccountverified=true;
-    user.verifyOtp="";
-    user.verifyOtpExpireAt=0;
-    await user.save();
-    return res.json({success:true, message:"email verified successfully"})
-  }catch(error){
-    return res.json({success:false,message:error.message})
-  }
-}
 
 
 
@@ -194,63 +123,6 @@ const { otp } = req.body;
 
 
 
-/////SEND PASSWORD RESET OTP
-const sendResetOtp=async(req,res)=>{
-  const{email}=req.body;
-  if(!email){
-    return res.json({success:false,message:"Email is required"})
-  }
-  try{
-    const user = await userModel.findOne({email});
-    if(!user){
-      return res.json({success:false,message:"user not found"})
-    }
-     const otp = String(Math.floor(100000 + Math.random() * 900000));
 
-    user.resetOtp = otp;
-    user.resetOtpExpireAt = Date.now() + 15 * 60 *  1000;
-    await user.save();
 
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "password reset OTP",
-      text: `Your reset OTP is ${otp}. Used this opt to reset your password.`,
-    };
-
-    await transporter.sendMail(mailOptions);
-    return res.json({success:true,message:"otp send to your email"})
-  }catch(error){
-    return res.json({success:false,message:error.message})
-  }
-}
-
-////RESET YOUR PASSWORD
-const resetPassword=async(req,res)=>{
-  const{email,otp,newPassword}=req.body;
-  if(!email || !otp || !newPassword){
-    return res.json({success:false,message:"Email,otp,New Password is required"});
-  }
-  try{
-    const user= await userModel.findOne({email});
-    if(!user){
-      return res.json({success:false,message:"User Does not exist"})
-    }
-    if(user.resetOtp==="" || user.resetOtp!==otp){
-      return res.json({success:false,message:"Invalid otp"})
-    }
-    if(user.resetOtpExpireAt<Date.now()){
-      return res.json({success:false,message:"Otp Expired"})
-    }
-    const hashedPassword=await bcrypt.hash(newPassword,10);
-    user.password=hashedPassword
-    user.resetOtp=""
-    user.resetOtpExpireAt=0
-    await user.save();
-    return res.json({success:true,message:"Your reset password is changed successfully"})
-  }catch(error){
-    return res.json({success:false,message:error.message})
-  }
-}
-
-module.exports = { register,login,logout,sendVerifyOtp,verifyEmail,isAuthenticated, sendResetOtp ,resetPassword};
+module.exports = { register,login,logout,isAuthenticated,};

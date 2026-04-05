@@ -30,7 +30,7 @@ function Login() {
         if (data.success) {
           setIsLoggedin(true);
           if (data.token) localStorage.setItem("token", data.token);
-          window.location.href = "http://localhost:5174";
+          window.location.href = "http://localhost:5173";
         } else {
           toast.error(data.message);
         }
@@ -44,7 +44,7 @@ function Login() {
         if (data.success) {
           setIsLoggedin(true);
           if (data.token) localStorage.setItem("token", data.token);
-          window.location.href = "http://localhost:5174";
+          window.location.href = "http://localhost:5173";
         } else {
           toast.error(data.message);
         }

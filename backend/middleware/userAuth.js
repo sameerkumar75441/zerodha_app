@@ -10,7 +10,7 @@ const userAuth = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { id: decoded.id };   // ✅ best way
+    req.user = { id: decoded.id };   
     next();
   } catch (error) {
     return res.json({ success: false, message: error.message });
