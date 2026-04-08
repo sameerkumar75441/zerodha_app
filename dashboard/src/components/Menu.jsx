@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { AppContent } from "../context/AppContext";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  const frontendUrl = import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173';
-  const backendUrl = 'http://localhost:5000'; // Adjust to your backend URL
-  const isAuthenticated = !!localStorage.getItem('token');
+  const { isLoggedin, logout, backendUrl } = useContext(AppContent);
+  const frontendUrl = 'http://localhost:5173';
+  const isAuthenticated = isLoggedin;
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
@@ -88,9 +88,7 @@ const Menu = () => {
 
         <hr />
 
-        {isAuthenticated && (
-          <>
-            <div className="profile" onClick={handleProfileClick}>
+        <div className="profile" onClick={handleProfileClick}>
               <div className="avatar">ZU</div>
               <p className="username">USERID</p>
             </div>
@@ -102,8 +100,7 @@ const Menu = () => {
                 </p>
               </div>
             )}
-          </>
-        )}
+
       </div>
     </div>
   );

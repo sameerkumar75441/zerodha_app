@@ -28,9 +28,8 @@ function Login() {
         );
 
         if (data.success) {
-          setIsLoggedin(true);
-          if (data.token) localStorage.setItem("token", data.token);
-          navigate('/');
+          toast.success("Account created! Redirecting to dashboard...");
+          window.location.href = "http://localhost:5174/";
         } else {
           toast.error(data.message);
         }
@@ -42,17 +41,17 @@ function Login() {
         );
 
         if (data.success) {
-          setIsLoggedin(true);
-          if (data.token) localStorage.setItem("token", data.token);
-          navigate('/');
+          toast.success("Login successful! Redirecting to dashboard...");
+          window.location.href = "http://localhost:5174/";
         } else {
           toast.error(data.message);
         }
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
+
 
   return (
     <>

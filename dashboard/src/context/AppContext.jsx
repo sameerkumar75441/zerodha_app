@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
@@ -7,13 +6,12 @@ export const AppContent = createContext();
 export const AppContextProvider = ({ children }) => {
   axios.defaults.withCredentials = true;
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = 'http://localhost:5000'; // Hardcode or env
 
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true); // ⭐ MOST IMPORTANT
+  const [loading, setLoading] = useState(true);
 
-  // ✅ Auth check
   const getAuthState = async () => {
     try {
       const res = await axios.get(`${backendUrl}/api/auth/is-auth`);
@@ -29,26 +27,25 @@ export const AppContextProvider = ({ children }) => {
       setIsLoggedin(false);
       setUserData(null);
     } finally {
-      setLoading(false); // ⭐ auth check complete
+      setLoading(false);
     }
   };
 
-const logout = async () => {
+  const logout = async () => {
     try {
       await axios.get(`${backendUrl}/api/auth/logout`);
     } catch (e) {}
     setIsLoggedin(false);
     setUserData(null);
-    window.location.href = '/';
+    window.location.href = "http://localhost:5173/login";
   };
-
-
-  // Removed localStorage token handling - using cookies + withCredentials
-
 
   useEffect(() => {
     getAuthState();
   }, []);
+
+  // No loading redirect - allow access, check auth in components
+
 
   return (
     <AppContent.Provider
@@ -66,3 +63,4 @@ const logout = async () => {
     </AppContent.Provider>
   );
 };
+

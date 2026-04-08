@@ -21,13 +21,8 @@ const { userRouter } = require("./Routes/userRoute.js");
 // app.use(cors({origin:allowedOrigins,credentials:true}));
 
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  process.env.DASHBOARD_URL
-];
-
 app.use(cors({
-  origin: allowedOrigins,
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }));
 

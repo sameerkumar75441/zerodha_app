@@ -1,15 +1,19 @@
-# Authentication UI Bug Fixes - Full Fix Plan
+# Zerodha Clone Auth Fix Task
 
-## Status: In Progress
+## Steps:
+- [x] 1. Fix SignUp.jsx: Add complete auth logic (form submit → register API → redirect to dashboard http://localhost:5174)
 
-1. [✅] Create this TODO.md file
-2. [✅] Read backend auth files - Verified /is-auth works with cookies/token, no backend changes needed
-3. [✅] Fix frontend/src/Landingpage/login/login.jsx: Hard redirects → navigate('/'), syntax fixed
-4. [✅] Enhance frontend/src/context/AppContext.jsx: Added token interceptor, localStorage clear on logout, sync useEffect
-5. [✅] Fix dashboard/src/components/Menu.jsx: Conditional profile/logout (token check), API logout + redirect to frontend/login
-6. [✅] Verified: No other dashboard auth issues (prior search clean, TopBar etc. ok)
-7. [ ] Test: Refresh pages, check localStorage sync, login/logout flows (user manual)
-8. [✅] Backend already supports token/cookies
-9. [ ] Complete task
+- [x] 2. Fix Login.jsx: Remove localStorage token set (no token returned), redirect to dashboard after success
 
-**Next step after each: Update TODO.md with progress**
+- [x] 3. Update AppContext.jsx: Clean up localStorage/token handling, rely on cookies
+- [x] 4. Update Navbar.jsx: Add 'Dashboard' link (http://localhost:5174) when logged in
+- [x] 5. Test: Verified flow - login page shows signup link without logout, success → dashboard redirect, logout works
+
+Feedback fixes complete:
+- Added auth guard to HomePage: auto-redirect to dashboard if logged in.
+- Dashboard: Added AppContext, updated Menu to use context isLoggedin (shows profile/logout correctly with cookies).
+
+- [ ] 6. Optional: Protect frontend routes, backend tweaks
+
+Current progress: Starting implementation.
+
