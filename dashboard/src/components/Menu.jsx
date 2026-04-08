@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
+  const frontendUrl = import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173';
+  const backendUrl = 'http://localhost:5000'; // Adjust to your backend URL
+  const isAuthenticated = !!localStorage.getItem('token');
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
@@ -15,9 +18,14 @@ const Menu = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await axios.get(`${backendUrl}/api/auth/logout`, { withCredentials: true });
+    } catch (e) {
+      console.log('Logout API failed:', e);
+    }
     localStorage.removeItem("token");
-    window.location.href = "http://localhost:5174/";
+    window.location.href = frontendUrl + '/login'; // SPA navigate doesn't cross apps
   };
 
   const menuClass = "menu";
@@ -80,17 +88,21 @@ const Menu = () => {
 
         <hr />
 
-        <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
-        </div>
+        {isAuthenticated && (
+          <>
+            <div className="profile" onClick={handleProfileClick}>
+              <div className="avatar">ZU</div>
+              <p className="username">USERID</p>
+            </div>
 
-        {isProfileDropdownOpen && (
-          <div className="profile-dropdown">
-            <p className="logout" onClick={handleLogout}>
-              Logout
-            </p>
-          </div>
+            {isProfileDropdownOpen && (
+              <div className="profile-dropdown">
+                <p className="logout" onClick={handleLogout}>
+                  Logout
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

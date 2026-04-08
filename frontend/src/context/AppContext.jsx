@@ -33,13 +33,37 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {
+const logout = async () => {
     try {
       await axios.get(`${backendUrl}/api/auth/logout`);
     } catch (e) {}
+    localStorage.removeItem('token');
     setIsLoggedin(false);
     setUserData(null);
   };
+
+  // Token sync from localStorage
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token && !loading) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }, [loading]);
+
+  // Axios interceptor for auth token
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, []);
 
   useEffect(() => {
     getAuthState();
